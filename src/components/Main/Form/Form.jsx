@@ -2,9 +2,12 @@ import React, { useState, useContext } from 'react';
 import { TextField, Typography, Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import { ExpenseTrackerContext } from '../../../context/context';
 import { v4 as uuidv4 } from 'uuid';
-import useStyles from './formStyles';
 import { incomeCategories, expenseCategories } from '../../../constants/categories';
 import formatDate from '../../../utils/formatDate';
+import CustomizedSnackbar from '../../Snackbar/Snackbar';
+
+import useStyles from './formStyles';
+
 
 const initialState = {
     amount: '',
@@ -17,10 +20,12 @@ const Form = () => {
     const classes = useStyles();
     const [formData, setFormData] = useState(initialState)
     const { addTransaction } = useContext(ExpenseTrackerContext)
+    const [open, setOpen] = useState(false)
 
     const createTransaction = () => {
         const transaction = { ...formData, amount: Number(formData.amount), id: uuidv4() }
 
+        setOpen(true)
         addTransaction(transaction)
         setFormData(initialState)
     }
@@ -29,6 +34,7 @@ const Form = () => {
 
     return (
         <Grid container spacing={2}>
+            <CustomizedSnackbar open={open} setOpen={setOpen}/>
             <Grid item xs={12}>
                 <Typography align='center' variant='subtitle2' gutterBottom>
                     ...
